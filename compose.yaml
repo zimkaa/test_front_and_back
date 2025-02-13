@@ -1,0 +1,10 @@
+services:
+  react-form-app:
+    build: ./frontend
+    ports:
+      - "3005:3005"
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
