@@ -30,6 +30,4 @@ curl -sv -XPOST -H 'Content-Type: application/json' -d '{"first_name": "Ivan Iva
 
 Open your browser
 
-```url
-http://localhost:3005/
-```
+[http://localhost:3005/](http://localhost:3005/)
