@@ -2,12 +2,9 @@ from asyncio import sleep
 import random
 
 from pydantic import BaseModel, field_validator, ValidationError
-from starlette.applications import Starlette
-from starlette.middleware import Middleware
-from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import JSONResponse
-from starlette.routing import Route
-import uvicorn
+from litestar import Litestar, post
+from litestar.config.cors import CORSConfig
+from litestar.response import Response
 
 
 class SubmitRequest(BaseModel):
@@ -27,9 +24,8 @@ class SubmitRequest(BaseModel):
             raise ValueError("No whitespace in last name is allowed")
         return value
 
-
-async def submit(request):
-    data = await request.json()
+@post("/api/submit")
+async def submit(data: dict[str, str]) -> Response:
     await sleep(random.uniform(0, 2.5))
     try:
         form_data = SubmitRequest(**data)
@@ -39,28 +35,22 @@ async def submit(request):
             field = error["loc"][0]
             msg = error["ctx"]["error"]
             error_msg[field] = [str(msg)]
-        return JSONResponse(
-            {"success": False, "error": error_msg},
-            status_code=400,
-        )
+        return Response(content={"success": False, "error": error_msg}, status_code=400)
 
     data = {
         "date": form_data.date,
         "name": f"{form_data.first_name} {form_data.last_name}",
     }
 
-    return JSONResponse({"success": True, "data": [data] * random.randint(2, 5)})
+    return Response(content={"success": True, "data": [data] * random.randint(2, 5)})
 
 
-routes = [
-    Route("/api/submit", submit, methods=["POST"]),
-]
+cors_config = CORSConfig(allow_origins=["*"], allow_methods=["POST", "OPTIONS"])
 
-middleware = [Middleware(
-    CORSMiddleware, allow_origins=["*"], allow_methods=["POST", "OPTIONS"]
-)]
-
-app = Starlette(debug=True, routes=routes, middleware=middleware)
+app = Litestar(
+    route_handlers=[submit],
+    cors_config=cors_config,
+)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000)
