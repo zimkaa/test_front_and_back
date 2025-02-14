@@ -9,7 +9,7 @@ git clone git@github.com:zimkaa/test_front_and_back.git && cd test_front_and_bac
 ## 2. Start project
 
 ```sh
-docker compose -f compose.yaml up --build  
+docker compose -f compose.yaml up --build
 ```
 
 ## 3. Query from console
