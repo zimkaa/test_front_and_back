@@ -5,10 +5,10 @@ from pydantic import BaseModel, field_validator, ValidationError
 from litestar import Litestar, post
 from litestar.config.cors import CORSConfig
 from litestar.response import Response
-
+from datetime import date
 
 class SubmitRequest(BaseModel):
-    date: str
+    date: date
     first_name: str
     last_name: str
 
@@ -38,7 +38,7 @@ async def submit(data: dict[str, str]) -> Response:
         return Response(content={"success": False, "error": error_msg}, status_code=400)
 
     data = {
-        "date": form_data.date,
+        "date": form_data.date.strftime("%Y-%m-%d"),
         "name": f"{form_data.first_name} {form_data.last_name}",
     }
 
