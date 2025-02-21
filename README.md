@@ -20,14 +20,18 @@ docker compose -f compose.yaml up --build
 curl -sv -XPOST -H 'Content-Type: application/json' -d '{"first_name": "Ivan", "last_name": "Ivanov", "date": "2025-01-02"}' http://localhost:8000/api/submit
 ```
 
-### Fail query
+### Fail queries
 
 ```sh
 curl -sv -XPOST -H 'Content-Type: application/json' -d '{"first_name": "Ivan Ivanov", "last_name": "Ivanov", "date": "2025-01-02"}' http://localhost:8000/api/submit
 ```
 
-## 4. Query from browser
+```sh
+curl -sv -XPOST -H 'Content-Type: application/json' -d '{"first_name": "Ivan", "last_name": "Ivanov", "date": "2025-55-02"}' http://localhost:8000/api/submit
+```
+
+### 4. Query from browser
 
 Open your browser
 
-[http://localhost:3005/](http://localhost:3005/)
+[http://localhost:8000/](http://localhost:8000/)
