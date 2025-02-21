@@ -1,5 +1,9 @@
 # Simple backend and frontend
 
+The backend responds with a delay of 0-3.
+
+Validate data. No white space is allowed in first_name and last_name.
+
 ## 1. Clone project
 
 ```sh
